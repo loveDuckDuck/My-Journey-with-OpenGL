@@ -1,0 +1,33 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "cppbuild",
+      "label": "C/C++: g++ build active file with glad and Shader from fixed folder",
+      "command": "/usr/bin/g++",
+      "args": [
+        "-fdiagnostics-color=always",
+        "-g",
+        "${file}",
+        "${workspaceFolder}/util/glad.c",
+        "${workspaceFolder}/util/Shader.cpp",
+        "-o",
+        "${fileDirname}/${fileBasenameNoExtension}",
+        "-I${workspaceFolder}/util",
+        "-ldl",
+        "-lglfw"
+      ],
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "Compile active file plus glad and Shader from fixed util folder"
+    }
+  ]
+}
