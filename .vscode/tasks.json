@@ -11,6 +11,8 @@
         "${file}",
         "${workspaceFolder}/util/glad.c",
         "${workspaceFolder}/util/Shader.cpp",
+        "${workspaceFolder}/util/Texture.cpp",
+        "${workspaceFolder}/util/stb_image.h",
         "-o",
         "${fileDirname}/${fileBasenameNoExtension}",
         "-I${workspaceFolder}/util",
