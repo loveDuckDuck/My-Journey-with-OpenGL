@@ -13,6 +13,8 @@
         "${workspaceFolder}/util/Shader.cpp",
         "${workspaceFolder}/util/Texture.cpp",
         "${workspaceFolder}/util/stb_image.h",
+        "${workspaceFolder}/util/Cube.cpp",
+        
         "-o",
         "${fileDirname}/${fileBasenameNoExtension}",
         "-I${workspaceFolder}/util",

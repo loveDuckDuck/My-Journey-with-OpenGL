@@ -5,6 +5,11 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+
 class Shader
 {
 
@@ -28,6 +33,9 @@ public:
     void setInt(const std::string &name, int value) const;
     void setFloat(const std::string &name, float value) const;
     void setUniform(const std::string &name, vector3 value) const;
+    void setUniformTransformation(const std::string &name,const glm::mat4 transformation);
+
+
 private:
     // utility function for checking shader compilation/linking errors.
     // ------------------------------------------------------------------------
