@@ -34,8 +34,8 @@ public:
     void setFloat(const std::string &name, float value) const;
     void setUniform(const std::string &name, vector3 value) const;
     void setUniformTransformation(const std::string &name,const glm::mat4 transformation);
-
-
+    void setVec3(const std::string &name, const glm::vec3 &value);
+    void setMat4(const std::string &name, const glm::mat4 &value);
 private:
     // utility function for checking shader compilation/linking errors.
     // ------------------------------------------------------------------------
