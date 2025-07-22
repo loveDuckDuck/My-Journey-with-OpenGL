@@ -84,10 +84,11 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
-glm::vec3 getRotatedPosition(float angle, float radius, glm::vec3  center) {
-    glm::vec3  pos;
+glm::vec3 getRotatedPosition(float angle, float radius, glm::vec3 center)
+{
+    glm::vec3 pos;
     pos.x = center.x + radius * cos(angle);
-    pos.z =center.z + radius * sin(angle);
+    pos.z = center.z + radius * sin(angle);
     pos.y = center.y; // same height
     return pos;
 }
@@ -134,7 +135,7 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     Shader ligthShader("light_shader.vs", "light_fragment.fs");
-    Shader cuberShader("cube_shader.vs", "cube_fragment.fs");
+    Shader cuberShader("material_shader.vs", "material_fragment.fs");
 
     glm::vec3 objectColor(1.0f, 0.5f, 0.31f);
     glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
@@ -191,8 +192,25 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
         cuberShader.use();
 
+        lightColor.x = sin(glfwGetTime() * 2.0f);
+        lightColor.y = sin(glfwGetTime() * 0.7f);
+        lightColor.z = sin(glfwGetTime() * 1.3f);
+
+
         cuberShader.setVec3("objectColor", objectColor);
         cuberShader.setVec3("lightColor", lightColor);
+
+        cuberShader.setVec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
+        cuberShader.setVec3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
+        cuberShader.setVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+        cuberShader.setFloat("material.shininess", 32.0f);
+
+        glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
+        glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+        cuberShader.setVec3("light.ambient", ambientColor);
+        cuberShader.setVec3("light.diffuse", diffuseColor);
+        
+        cuberShader.setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
 
         // bind Texture
 
@@ -200,10 +218,11 @@ int main()
         trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
         glm::mat4 view = camera.GetViewMatrix();
         trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-        
+
         // world transformation
         glm::mat4 model = glm::mat4(1.0f);
         cuberShader.setMat4("model", model);
+        model = glm::scale(model, glm::vec3(0.6f)); // a smaller cube
 
         glm::mat4 projection;
         projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f,
@@ -212,8 +231,8 @@ int main()
         cuberShader.setUniformTransformation("model", model);
         cuberShader.setUniformTransformation("view", camera.GetViewMatrix());
         cuberShader.setUniformTransformation("projection", projection);
-        cuberShader.setVec3("lightPos", lightPos);  
-        cuberShader.setVec3("viewPos", camera.Position);  
+        cuberShader.setVec3("lightPos", lightPos);
+        cuberShader.setVec3("viewPos", camera.Position);
 
         // draw our first triangle
         glBindVertexArray(VAOCube);
@@ -221,17 +240,18 @@ int main()
 
         // also draw the lamp object
         ligthShader.use();
+
+        ligthShader.setVec3("aColor", glm::vec3(lightColor));
         ligthShader.setMat4("projection", projection);
         ligthShader.setMat4("view", view);
 
-       // lightPos = getRotatedPosition(angle,1.0f,glm::vec3(1.0f,1.0f,1.0f)) * (float)glfwGetTime();
-    
         model = glm::mat4(1.0f);
-        model = glm::translate(model, getRotatedPosition((float)glfwGetTime(),1.0f,glm::vec3(0.0f,  0.0f,  0.0f)) );
-        //model = glm::translate(model,lightPos);
-        lightPos = getRotatedPosition((float)glfwGetTime(),1.0f,lightPos);
+        model = glm::translate(model, getRotatedPosition((float)glfwGetTime(), 1.0f, glm::vec3(0.0f, 0.0f, 0.0f)));
+        // model = glm::translate(model,lightPos);
+        lightPos = getRotatedPosition((float)glfwGetTime(), 1.0f, lightPos);
         lightPos = lightPos * 0.4f;
-        model = glm::scale(model, glm::vec3(0.4f)); // a smaller cube
+
+        model = glm::scale(model, glm::vec3(0.3f)); // a smaller cube
         ligthShader.setMat4("model", model);
 
         glBindVertexArray(VAOLightCube);

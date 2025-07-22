@@ -15,7 +15,7 @@ void main()
     // here calculate the ambient, so the light that tecnichanil refectled
     // along the ambient
     float ambientStrength=.3;
-    float specularStrength = 0.5;
+    float specularStrength = 0.75;
     vec3 ambient=ambientStrength*lightColor;
     
     // here define the diffuse light, given bu the dot product between
@@ -43,7 +43,7 @@ void main()
     // we need to think that we can use the view direction that is this case 
     vec3 viewDir = normalize(viewPos - FragPos);
     vec3 reflectDir = reflect(-lightDir, norm);  
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 256);//shines value
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);//shines value
     vec3 specular = specularStrength * spec * lightColor;  
 
 
