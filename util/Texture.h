@@ -23,6 +23,7 @@ public:
     ~Texture();
 
     void use();
+    static unsigned int loadTexture(const char *path);
 
 };
 

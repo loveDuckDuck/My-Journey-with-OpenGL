@@ -16,6 +16,8 @@
         "${workspaceFolder}/util/Cube.cpp",
         "${workspaceFolder}/util/Camera.cpp",
         "${workspaceFolder}/util/Random.h",
+        "${workspaceFolder}/util/Filesystem.h",
+        "${workspaceFolder}/util/Callback.h",
         "-o",
         "${fileDirname}/${fileBasenameNoExtension}",
         "-I${workspaceFolder}/util",

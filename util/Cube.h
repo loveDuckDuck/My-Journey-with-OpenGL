@@ -4,7 +4,7 @@
 
 class Cube {
 private:
-    static const float vertices[36 * 6];  // shared among all instances
+    static const float vertices[36 * 8];  // shared among all instances
 public:
     Cube();
     ~Cube();

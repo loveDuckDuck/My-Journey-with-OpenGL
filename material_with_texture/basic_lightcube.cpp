@@ -151,26 +151,26 @@ int main()
     Random random;
 
     glm::vec3 cubePositions[] = {
-        random.GenerateVec3(-5, 5),
-        random.GenerateVec3(-5, 5),
-        random.GenerateVec3(-5, 5),
-        random.GenerateVec3(-5, 5),
-        random.GenerateVec3(-5, 5),
-        random.GenerateVec3(-5, 5),
-        random.GenerateVec3(-5, 5),
-        random.GenerateVec3(-5, 5),
-        random.GenerateVec3(-5, 5),
-        random.GenerateVec3(-5, 5),
-        random.GenerateVec3(-5, 5),
-        random.GenerateVec3(-5, 5),
-        random.GenerateVec3(-5, 5),
-        random.GenerateVec3(-5, 5),
-        random.GenerateVec3(-5, 5),
-        random.GenerateVec3(-5, 5),
-        random.GenerateVec3(-5, 5),
-        random.GenerateVec3(-5, 5),
-        random.GenerateVec3(-5, 5),
-        random.GenerateVec3(-5, 5)};
+        random.GenerateVec3(-3, 3),
+        random.GenerateVec3(-3, 3),
+        random.GenerateVec3(-3, 3),
+        random.GenerateVec3(-3, 3),
+        random.GenerateVec3(-3, 3),
+        random.GenerateVec3(-3, 3),
+        random.GenerateVec3(-3, 3),
+        random.GenerateVec3(-3, 3),
+        random.GenerateVec3(-3, 3),
+        random.GenerateVec3(-3, 3),
+        random.GenerateVec3(-3, 3),
+        random.GenerateVec3(-3, 3),
+        random.GenerateVec3(-3, 3),
+        random.GenerateVec3(-3, 3),
+        random.GenerateVec3(-3, 3),
+        random.GenerateVec3(-3, 3),
+        random.GenerateVec3(-3, 3),
+        random.GenerateVec3(-3, 3),
+        random.GenerateVec3(-3, 3),
+        random.GenerateVec3(-3, 3)};
     Cube cube;
     // create my VAO and VBO
     unsigned int VAOCube, VBO;
@@ -204,17 +204,14 @@ int main()
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
-    Texture texture1(FileSystem::getPath("Rock062_1K-JPG_Color.jpg").c_str(), 0);
-    unsigned int diffuseMap = texture1.loadTexture(FileSystem::getPath("Rock062_1K-JPG_Color.jpg").c_str());
+    Texture texture1(FileSystem::getPath("container2.png").c_str(), 0);
+    unsigned int diffuseMap = texture1.loadTexture(FileSystem::getPath("container2.png").c_str());
 
-    Texture texture2(FileSystem::getPath("Rock062_1K-JPG_Roughness.jpg").c_str(), 1);
-    unsigned int specularMap = texture1.loadTexture(FileSystem::getPath("Rock062_1K-JPG_Roughness.jpg").c_str());
-
-    Texture texture3(FileSystem::getPath("Rock062_1K-JPG_NormalGL.jpg").c_str(), 2);
-    unsigned int normalMap = texture1.loadTexture(FileSystem::getPath("Rock062_1K-JPG_NormalGL.jpg").c_str());
+    Texture texture2(FileSystem::getPath("container2_specular.png").c_str(), 1);
+    unsigned int specularMap = texture1.loadTexture(FileSystem::getPath("container2_specular.png").c_str());
 
     // lighting
-    glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+    glm::vec3 lightPos(5.2f, 5.0f, 2.0f);
     // render loop
     // -------------------------------------------------------------------------
     while (!glfwWindowShouldClose(window))
@@ -236,6 +233,8 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
         cuberShader.use();
 
+        cuberShader.setVec3("light.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
+        cuberShader.setVec3("viewPos", camera.Position);
         cuberShader.setVec3("objectColor", objectColor);
         cuberShader.setVec3("lightColor", lightColor);
 
@@ -250,10 +249,16 @@ int main()
         glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
         glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
 
+        cuberShader.setVec3("light.position", lightPos);
+
         cuberShader.setVec3("light.ambient", ambientColor);
         cuberShader.setVec3("light.diffuse", diffuseColor);
 
         cuberShader.setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+
+        cuberShader.setFloat("light.constant", 1.0f);
+        cuberShader.setFloat("light.linear", 0.09f);
+        cuberShader.setFloat("light.quadratic", 0.032f);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, diffuseMap);
@@ -261,44 +266,36 @@ int main()
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, specularMap);
 
-        glActiveTexture(GL_TEXTURE2);
-        glBindTexture(GL_TEXTURE_2D, normalMap);
-
         // bind Texture
-
-        glm::mat4 trans = glm::mat4(1.0f);
-        trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
         glm::mat4 view = camera.GetViewMatrix();
-        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 
-        glm::mat4 projection;
-        glm::mat4 model = glm::mat4(1.0f);
+        glBindVertexArray(VAOCube);
 
+        glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f,
+                                                100.0f);
+        cuberShader.setUniformTransformation("view", camera.GetViewMatrix());
+        cuberShader.setUniformTransformation("projection", projection);
+          glm::mat4 model;
         for (unsigned int i = 0; i < 20; i++)
         {
             // world transformation
-            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::mat4(1.0f);
             model = glm::translate(model, cubePositions[i]);
+            model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f));
+
             float angle = 20.0f * i;
             cuberShader.setMat4("model", model);
             model = glm::scale(model, glm::vec3(0.6f)); // a smaller cube
 
-            glm::mat4 projection;
-            projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f,
-                                          100.0f);
-
             cuberShader.setUniformTransformation("model", model);
-            cuberShader.setUniformTransformation("view", camera.GetViewMatrix());
-            cuberShader.setUniformTransformation("projection", projection);
-            cuberShader.setVec3("lightPos", lightPos);
-            cuberShader.setVec3("viewPos", camera.Position);
+
+            // cuberShader.setVec3("viewPos", camera.Position);
 
             // draw our first triangle
-            glBindVertexArray(VAOCube);
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
-projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f,
-                                          100.0f);
+
+
         // also draw the lamp object
         ligthShader.use();
 
@@ -307,10 +304,10 @@ projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f,
         ligthShader.setMat4("view", view);
 
         model = glm::mat4(1.0f);
-        model = glm::translate(model, getRotatedPosition((float)glfwGetTime(), 1.0f, glm::vec3(0.0f, 0.0f, 0.0f)));
-        // model = glm::translate(model,lightPos);
-        lightPos = getRotatedPosition((float)glfwGetTime(), 1.0f, lightPos);
-        lightPos = lightPos * 0.4f;
+        // model = glm::translate(model, getRotatedPosition((float)glfwGetTime(), 1.0f, glm::vec3(0.0f, 0.0f, 0.0f)));
+        model = glm::translate(model, lightPos);
+        // lightPos = getRotatedPosition((float)glfwGetTime(), 1.0f, lightPos);
+        // lightPos = lightPos * 0.4f;
 
         model = glm::scale(model, glm::vec3(0.3f)); // a smaller cube
         ligthShader.setMat4("model", model);

@@ -10,6 +10,7 @@ struct Material{
     float shininess;
 };
 
+uniform Material material;
 struct Light {
     vec3 position;
   
@@ -21,8 +22,6 @@ struct Light {
 uniform Light light; 
 
 
-
-uniform Material material;
 
 in vec3 Normal;
 in vec3 FragPos;
