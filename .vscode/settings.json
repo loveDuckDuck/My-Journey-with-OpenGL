@@ -52,6 +52,7 @@
         "ctime": "cpp",
         "format": "cpp",
         "span": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "map": "cpp"
     }
 }

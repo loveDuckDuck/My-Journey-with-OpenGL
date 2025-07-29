@@ -18,11 +18,17 @@
         "${workspaceFolder}/util/Random.h",
         "${workspaceFolder}/util/Filesystem.h",
         "${workspaceFolder}/util/Callback.h",
+
+        "${workspaceFolder}/util/Mesh.cpp",
+        "${workspaceFolder}/util/Model.cpp",
+        
         "-o",
         "${fileDirname}/${fileBasenameNoExtension}",
         "-I${workspaceFolder}/util",
         "-ldl",
-        "-lglfw"
+        "-lglfw",
+        "-I/usr/include/assimp", // include path
+        "-lassimp", // link against assimp
       ],
       "options": {
         "cwd": "${fileDirname}"

@@ -6,9 +6,7 @@
 #include <GLFW/glfw3.h>
 #include <cmath>
 
-
-
-class Texture
+class TextureLoader
 {
 private:
     unsigned int ID;
@@ -19,8 +17,8 @@ private:
     int nrChannels;
 
 public:
-    Texture(const char *name, const unsigned int ntexture);
-    ~Texture();
+    TextureLoader(const char *name, const unsigned int ntexture);
+    ~TextureLoader();
 
     void use();
     static unsigned int loadTexture(const char *path);

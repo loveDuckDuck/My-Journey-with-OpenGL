@@ -3,7 +3,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "../util/stb_image.h"
 
-Texture::Texture(const char *name, const unsigned int ntexture)
+TextureLoader::TextureLoader(const char *name, const unsigned int ntexture)
 {
     numtexture = ntexture;
     glGenTextures(1, &ID);
@@ -31,9 +31,9 @@ Texture::Texture(const char *name, const unsigned int ntexture)
     stbi_image_free(data);
 }
 
-Texture::~Texture() {}
+TextureLoader::~TextureLoader() {}
 
-void Texture::use()
+void TextureLoader::use()
 {
     glActiveTexture(GL_TEXTURE0 + numtexture);
     glBindTexture(GL_TEXTURE_2D, ID);
@@ -41,7 +41,7 @@ void Texture::use()
 
 // utility function for loading a 2D texture from file
 // ---------------------------------------------------
-unsigned int Texture::loadTexture(char const * path)
+unsigned int TextureLoader::loadTexture(char const * path)
 {
     unsigned int textureID;
     glGenTextures(1, &textureID);
