@@ -245,6 +245,9 @@ int main()
         cuberShader.setMat4("projection", projection);
         cuberShader.setMat4("view", view);
 
+
+
+
         // world transformation
         glm::mat4 model = glm::mat4(1.0f);
         cuberShader.setMat4("model", model);

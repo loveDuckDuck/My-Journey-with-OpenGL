@@ -24,6 +24,7 @@
         "${workspaceFolder}/util/MusicPlayer.h",
         "${workspaceFolder}/util/SimpleFFT.h",
         "${workspaceFolder}/util/CanvasCube.h",
+        "${workspaceFolder}/util/Umbrella.h",
         "-o",
         "${workspaceFolder}/build/programA",
         "-I${workspaceFolder}/util",
