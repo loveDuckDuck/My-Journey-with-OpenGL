@@ -11,17 +11,21 @@
         "${file}",
         "${workspaceFolder}/util/glad.c",
         "${workspaceFolder}/util/Shader.cpp",
-        "${workspaceFolder}/util/Texture.cpp",
+        "${workspaceFolder}/util/TextureLoader.cpp",
         "${workspaceFolder}/util/stb_image.h",
         "${workspaceFolder}/util/Cube.cpp",
         "${workspaceFolder}/util/Camera.cpp",
         "${workspaceFolder}/util/Random.h",
         "${workspaceFolder}/util/Filesystem.h",
         "${workspaceFolder}/util/Callback.h",
-
+        "${workspaceFolder}/util/Material.h",
         "${workspaceFolder}/util/Mesh.cpp",
         "${workspaceFolder}/util/Model.cpp",
+        "${workspaceFolder}/util/MusicPlayer.h",
+        "${workspaceFolder}/util/SimpleFFT.h",
+        "${workspaceFolder}/util/CanvasCube.h",
         
+
         "-o",
         "${fileDirname}/${fileBasenameNoExtension}",
         "-I${workspaceFolder}/util",
@@ -29,6 +33,9 @@
         "-lglfw",
         "-I/usr/include/assimp", // include path
         "-lassimp", // link against assimp
+        "-lopenal",
+         "-lsndfile",
+        "-I./minimp3" 
       ],
       "options": {
         "cwd": "${fileDirname}"

@@ -11,11 +11,23 @@ Model::Model(std::string const &path, bool gamma) : gammaCorrection(gamma)
     loadModel(path);
 }
 
+
+std::vector<Mesh> Model::getMeshes()
+{
+    return meshes;
+}
+
 // draws the model, and thus all its meshes
 void Model::Draw(Shader &shader)
 {
     for (unsigned int i = 0; i < meshes.size(); i++)
         meshes[i].Draw(shader);
+}
+
+void Model::Framebuffer()
+{
+    for (unsigned int i = 0; i < meshes.size(); i++)
+        glBindFramebuffer(GL_FRAMEBUFFER, meshes[i].getFrameBuffer());
 }
 
 // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.

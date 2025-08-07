@@ -9,6 +9,11 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std:
     setupMesh();
 }
 
+unsigned int Mesh::getVAO()
+{
+    return VAO;
+}
+
 
 void Mesh::setupMesh()
 {
@@ -35,7 +40,7 @@ void Mesh::setupMesh()
     glEnableVertexAttribArray(2);	
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 
-// vertex tangent
+    // vertex tangent
     glEnableVertexAttribArray(3);
     glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
 
@@ -44,6 +49,20 @@ void Mesh::setupMesh()
     glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
 
     glBindVertexArray(0);
+
+   
+//    // framebuffer configuration
+//     // -------------------------
+//     glGenFramebuffers(1, &framebuffer);
+//     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+//     // create a color attachment texture
+//     glGenTextures(1, &textureColorbuffer);
+//     glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
+//     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+//     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+//     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+
 } 
 
 
@@ -58,6 +77,8 @@ void Mesh::Draw(Shader &shader)
         // retrieve texture number (the N in diffuse_textureN)
         std::string number;
         std::string name = textures[i].type;
+        std::cout <<  name <<std::endl;
+
         if(name == "texture_diffuse")
             number = std::to_string(diffuseNr++);
         else if(name == "texture_specular")
@@ -65,11 +86,27 @@ void Mesh::Draw(Shader &shader)
 
         shader.setInt(("material." + name + number).c_str(), i);
         glBindTexture(GL_TEXTURE_2D, textures[i].id);
+
+
     }
     glActiveTexture(GL_TEXTURE0);
 
     // draw mesh
     glBindVertexArray(VAO);
+    //glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// use the color attachment texture as the texture of the quad plane
+
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
+
+
 }  
+
+void Mesh::DrawNoPresentTexture(Shader &shader)
+{
+    
+}
+
+        unsigned int Mesh::getFrameBuffer()
+        {
+            return framebuffer;
+        }

@@ -5,13 +5,16 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <glm/glm.hpp>
 #include <vector>
+
+#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "Shader.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
+#include "Shader.h"
+
 #define MAX_BONE_INFLUENCE 4
 
 struct Vertex {
@@ -37,19 +40,36 @@ struct Texture {
     std::string path;
 };
 
+struct Framebufufer {
+    unsigned int id;
+    int type;
+};
+
+
 class Mesh {
     public:
         // mesh data
         std::vector<Vertex>       vertices;
         std::vector<unsigned int> indices;
         std::vector<Texture>      textures;
-
+        std::vector<Framebufufer> framebuffers;
+        
+        
         Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
         void Draw(Shader &shader);
+        void DrawNoPresentTexture(Shader &shader);
+        unsigned int getFrameBuffer();
+
+        unsigned int getVAO();
+
+
     private:
         //  render data
-        unsigned int VAO, VBO, EBO;
-
+        unsigned int VAO, VBO, EBO, FBO;
+        unsigned int framebuffer;
+        unsigned int textureColorbuffer;
+        const unsigned int SCR_WIDTH = 800;
+        const unsigned int SCR_HEIGHT = 600;
         void setupMesh();
 };
 

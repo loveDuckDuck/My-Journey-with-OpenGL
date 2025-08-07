@@ -1,9 +1,9 @@
 #ifndef CALLBACK_H
 #define CALLBACK_H
 
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "UtilDimension.h"
 #include <iostream>
 #include <format>
 #include "Camera.h"
@@ -13,11 +13,9 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
-
+void mouseCallback(GLFWwindow* window, double xpos, double ypos);
 // settings
 // -------------------------------------------------------
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
 
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
@@ -28,6 +26,48 @@ float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
 float deltaTime = 0.0f; // Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
+
+
+glm::mat4 projectionMatrix;
+glm::mat4 viewMatrix;
+
+
+glm::vec3 screenToWorld(double mouseX, double mouseY)
+{
+    // Convert mouse coordinates to normalized device coordinates (NDC)
+    float x = (2.0f * mouseX) / SCR_WIDTH - 1.0f;
+    float y = 1.0f - (2.0f * mouseY) / SCR_HEIGHT;
+    float z = 1.0f; // Near plane
+    
+    glm::vec3 ray_nds = glm::vec3(x, y, z);
+    
+    // Convert to homogeneous clip coordinates
+    glm::vec4 ray_clip = glm::vec4(ray_nds.x, ray_nds.y, -1.0f, 1.0f);
+    
+    // Convert to eye coordinates
+    glm::vec4 ray_eye = glm::inverse(projectionMatrix) * ray_clip;
+    ray_eye = glm::vec4(ray_eye.x, ray_eye.y, -1.0f, 0.0f);
+    
+    // Convert to world coordinates
+    glm::vec3 ray_world = glm::vec3(glm::inverse(viewMatrix) * ray_eye);
+    ray_world = glm::normalize(ray_world);
+    
+    return ray_world;
+}
+
+void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {    // Convert screen coordinates to world coordinates
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        // Get current mouse position
+        double xpos, ypos;
+        glfwGetCursorPos(window, &xpos, &ypos);
+        
+        // Convert to world coordinates
+        glm::vec3 worldPos = screenToWorld(xpos, ypos);
+        
+        printf("Clicked at world coordinates: (%.2f, %.2f, %.2f)\n", 
+               worldPos.x, worldPos.y, worldPos.z);
+    }
+}
 
 // glfw: whenever the mouse moves, this callback is called
 // -------------------------------------------------------

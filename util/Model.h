@@ -26,11 +26,17 @@ class Model
 public:
     Model(std::string const &path,bool gamma = false);
     void Draw(Shader &shader);
+    void Framebuffer();
     bool gammaCorrection;
+
+
+    std::vector<Mesh> getMeshes();
 
 private:
     // model data
     std::vector<Mesh> meshes;
+    // this value is set during the load process
+    // using the path passed to the constructor
     std::string directory;
     std::vector<Texture> textures_loaded;
 

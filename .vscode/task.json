@@ -1,0 +1,102 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "cppbuild",
+      "label": "Build Program A",
+      "command": "/usr/bin/g++",
+      "args": [
+        "-fdiagnostics-color=always",
+        "-g",
+        "${workspaceFolder}/testingMonkeyOnCanvas.cpp",  
+        "${workspaceFolder}/util/glad.c",
+        "${workspaceFolder}/util/Shader.cpp",
+        "${workspaceFolder}/util/TextureLoader.cpp",
+        "${workspaceFolder}/util/stb_image.h",
+        "${workspaceFolder}/util/Cube.cpp",
+        "${workspaceFolder}/util/Camera.cpp",
+        "${workspaceFolder}/util/Random.h",
+        "${workspaceFolder}/util/Filesystem.h",
+        "${workspaceFolder}/util/Callback.h",
+        "${workspaceFolder}/util/Material.h",
+        "${workspaceFolder}/util/Mesh.cpp",
+        "${workspaceFolder}/util/Model.cpp",
+        "${workspaceFolder}/util/MusicPlayer.h",
+        "${workspaceFolder}/util/SimpleFFT.h",
+        "${workspaceFolder}/util/CanvasCube.h",
+        "-o",
+        "${workspaceFolder}/build/programA",
+        "-I${workspaceFolder}/util",
+        "-ldl",
+        "-lglfw",
+        "-I/usr/include/assimp",
+        "-lassimp",
+        "-lopenal",
+        "-lsndfile",
+        "-I./minimp3"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "type": "cppbuild",
+      "label": "Build Program B",
+      "command": "/usr/bin/g++",
+      "args": [
+        "-fdiagnostics-color=always",
+        "-g",
+        "${workspaceFolder}/testmusic.cpp",  
+        "${workspaceFolder}/util/glad.c",
+        "${workspaceFolder}/util/Shader.cpp",
+        "${workspaceFolder}/util/TextureLoader.cpp",
+        "${workspaceFolder}/util/stb_image.h",
+        "${workspaceFolder}/util/Cube.cpp",
+        "${workspaceFolder}/util/Camera.cpp",
+        "${workspaceFolder}/util/Random.h",
+        "${workspaceFolder}/util/Filesystem.h",
+        "${workspaceFolder}/util/Callback.h",
+        "${workspaceFolder}/util/Material.h",
+        "${workspaceFolder}/util/Mesh.cpp",
+        "${workspaceFolder}/util/Model.cpp",
+        "${workspaceFolder}/util/MusicPlayer.h",
+        "${workspaceFolder}/util/SimpleFFT.h",
+        "${workspaceFolder}/util/CanvasCube.h",
+        "-o",
+        "${workspaceFolder}/build/programB",
+        "-I${workspaceFolder}/util",
+        "-ldl",
+        "-lglfw",
+        "-I/usr/include/assimp",
+        "-lassimp",
+        "-lopenal",
+        "-lsndfile",
+        "-I./minimp3"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Launch Program A",
+      "type": "process",
+      "command": "${workspaceFolder}/build/testingMonkeyOnCanvas",
+      "problemMatcher": []
+    },
+    {
+      "label": "Launch Program B",
+      "type": "process",
+      "command": "${workspaceFolder}/build/testmusic",
+      "problemMatcher": []
+    },
+    {
+      "label": "Launch Both Programs in Parallel",
+      "dependsOn": ["Launch Program A", "Launch Program B"],
+      "dependsOrder": "parallel",
+      "problemMatcher": [],
+      "type": "compound"
+    }
+  ]
+}
