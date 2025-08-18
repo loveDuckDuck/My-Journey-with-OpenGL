@@ -8,12 +8,10 @@
       "args": [
         "-fdiagnostics-color=always",
         "-g",
-        "${workspaceFolder}/testingMonkeyOnCanvas.cpp",  
         "${workspaceFolder}/util/glad.c",
         "${workspaceFolder}/util/Shader.cpp",
         "${workspaceFolder}/util/TextureLoader.cpp",
         "${workspaceFolder}/util/stb_image.h",
-        "${workspaceFolder}/util/Cube.cpp",
         "${workspaceFolder}/util/Camera.cpp",
         "${workspaceFolder}/util/Random.h",
         "${workspaceFolder}/util/Filesystem.h",

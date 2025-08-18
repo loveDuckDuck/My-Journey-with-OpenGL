@@ -1,0 +1,58 @@
+#ifndef MODEL_H
+#define MODEL_H
+
+// OpenGL & GLFW
+#include <glad/glad.h> // include glad to get the required OpenGL headers
+#include <GLFW/glfw3.h>
+
+// GLM mathematics
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+// ASSIMP model importer
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
+
+// Standard library
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+
+// Project headers
+#include "../ShaderClass/Shader.h"
+#include "../stb_image.h"
+#include "Mesh.h"
+
+
+
+class Model
+{
+public:
+    Model(std::string const &path,bool gamma = false);
+    void Draw(Shader &shader);
+    void Framebuffer();
+    bool gammaCorrection;
+
+
+    std::vector<Mesh> getMeshes();
+
+private:
+    // model data
+    std::vector<Mesh> meshes;
+    // this value is set during the load process
+    // using the path passed to the constructor
+    std::string directory;
+    std::vector<Texture> textures_loaded;
+
+    void loadModel(std::string const &path);
+    void processNode(aiNode *node, const aiScene *scene);
+    Mesh processMesh(aiMesh *mesh, const aiScene *scene);
+    std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type,
+                                              std::string typeName);
+};
+
+#endif

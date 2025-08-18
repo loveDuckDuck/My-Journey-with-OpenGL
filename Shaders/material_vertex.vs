@@ -26,22 +26,36 @@ uniform vec3 viewPos;
 
 void main()
 {
+    // Calculate fragment position 📍
     vs_out.FragPos = vec3(model * vec4(aPos, 1.0));   
+    // Pass texture coordinates 🗺️
     vs_out.TexCoords = aTexCoords;
     
+    // Calculate normal matrix 📐
     mat3 normalMatrix = transpose(inverse(mat3(model)));
+    // Tangent in tangent space 🧭
     vec3 T = normalize(normalMatrix * aTangent);
+    // Normal in tangent space ⬆️
     vec3 N = normalize(normalMatrix * aNormal);
+    // Re-orthogonalize T vector 🔄
     T = normalize(T - dot(T, N) * N);
+    // Calculate bitangent vector 🟦
     vec3 B = cross(N, T);
     
+    // Create TBN matrix 🧮
     mat3 TBN = transpose(mat3(T, B, N));    
+    // Light position in tangent space 💡
     vs_out.TangentLightPos = TBN * lightPos;
+    // View position in tangent space 👀
     vs_out.TangentViewPos  = TBN * viewPos;
+    // Fragment in tangent space 📌
     vs_out.TangentFragPos  = TBN * vs_out.FragPos;
     
+    // Calculate world space normal 🌐
     Normal = mat3(transpose(inverse(model))) * aNormal;  
+    // Calculate world space frag position 🌎
     FragPos = vec3(model * vec4(aPos, 1.0));
 
+    // Final clip space position 👓
     gl_Position = projection * view * model * vec4(aPos, 1.0);
 }

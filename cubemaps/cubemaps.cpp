@@ -1,4 +1,4 @@
-#include "../util/Umbrella.h"
+#include "../Utilities/Umbrella.h"
 
 // Improved cubemap loading with better error handling
 unsigned int loadCubemap(const std::vector<std::string> &faces);
@@ -174,11 +174,11 @@ int main()
     // glEnable(GL_MULTISAMPLE); // Enable multisampling for anti-aliasing
 
     // Load models
-    Model monkey(FileSystem::getPath("monkey.obj"));
+    Model monkey(FileSystem::getPath("obj/cube.obj"));
 
     // Create shaders
-    Shader shaderMonkey(FileSystem::getPath("Shaders/material_vertex.vs").c_str(),
-                        FileSystem::getPath("Shaders/material_fragment.fs").c_str());
+    Shader shaderMonkey(FileSystem::getPath("cubemaps/reflect.vs").c_str(),
+                        FileSystem::getPath("cubemaps/reflect.fs").c_str());
     Shader shaderCubeMap(FileSystem::getPath("cubemaps/map.vs").c_str(),
                          FileSystem::getPath("cubemaps/map.fs").c_str());
 
@@ -193,12 +193,12 @@ int main()
 
     // Load skybox textures
     std::vector<std::string> faces = {
-        "util/skybox/right.jpg",  // +X
-        "util/skybox/left.jpg",   // -X
-        "util/skybox/top.jpg",    // +Y
-        "util/skybox/bottom.jpg", // -Y
-        "util/skybox/front.jpg",  // +Z
-        "util/skybox/back.jpg"    // -Z
+        "Texture/CoitTower/negx.jpg",  // +X
+        "Texture/CoitTower/posx.jpg",   // -X
+        "Texture/CoitTower/posy.jpg",    // +Y
+        "Texture/CoitTower/negy.jpg", // -Y
+        "Texture/CoitTower/posz.jpg",  // +Z
+        "Texture/CoitTower/negz.jpg"    // -Z
     };
 
     unsigned int cubemapTexture = loadCubemap(faces);
@@ -225,6 +225,9 @@ int main()
     // Configure skybox shader
     shaderCubeMap.use();
     shaderCubeMap.setInt("skybox", 0);
+
+    shaderMonkey.use();
+    shaderMonkey.setInt("skybox", 0);
 
     // Main render loop
     while (!glfwWindowShouldClose(window))
@@ -254,6 +257,8 @@ int main()
                                                 0.1f, 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
 
+        shaderMonkey.use();
+
         // Setup lighting and render monkey
         setupLighting(shaderMonkey, lightConfig, camera, material);
         shaderMonkey.setMat4("projection", projection);
@@ -267,6 +272,15 @@ int main()
         // model = glm::rotate(model, currentFrame * 0.5f, glm::vec3(0.0f, 1.0f, 0.0f));
 
         shaderMonkey.setMat4("model", model);
+
+
+        for(Mesh mesh : monkey.getMeshes())
+        {
+            glBindVertexArray(mesh.getVAO());
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+        }
+
         monkey.Draw(shaderMonkey);
 
         // === RENDER SKYBOX ===

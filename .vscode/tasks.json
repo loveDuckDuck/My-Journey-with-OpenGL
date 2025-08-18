@@ -8,34 +8,31 @@
       "args": [
         "-fdiagnostics-color=always",
         "-g",
+        // Source files
         "${file}",
-        "${workspaceFolder}/util/glad.c",
-        "${workspaceFolder}/util/Shader.cpp",
-        "${workspaceFolder}/util/TextureLoader.cpp",
-        "${workspaceFolder}/util/stb_image.h",
-        "${workspaceFolder}/util/Cube.cpp",
-        "${workspaceFolder}/util/Camera.cpp",
-        "${workspaceFolder}/util/Random.h",
-        "${workspaceFolder}/util/Filesystem.h",
-        "${workspaceFolder}/util/Callback.h",
-        "${workspaceFolder}/util/Material.h",
-        "${workspaceFolder}/util/Mesh.cpp",
-        "${workspaceFolder}/util/Model.cpp",
-        "${workspaceFolder}/util/MusicPlayer.h",
-        "${workspaceFolder}/util/SimpleFFT.h",
-        "${workspaceFolder}/util/CanvasCube.h",
-        
-
+        "${workspaceFolder}/Utilities/glad.c",
+        "${workspaceFolder}/Utilities/ShaderClass/Shader.cpp",
+        "${workspaceFolder}/Utilities/ShaderClass/TextureLoader.cpp",
+        "${workspaceFolder}/Utilities/CameraClass/Camera.cpp",
+        "${workspaceFolder}/Utilities/ModelClass/Model.cpp",
+        "${workspaceFolder}/Utilities/ModelClass/Mesh.cpp",
+        // Output
         "-o",
         "${fileDirname}/${fileBasenameNoExtension}",
-        "-I${workspaceFolder}/util",
+        // Include paths
+        "-I${workspaceFolder}/Utilities",
+        "-I${workspaceFolder}/Utilities/Shader",
+        "-I${workspaceFolder}/Utilities/ShaderClass",
+        "-I${workspaceFolder}/Utilities/Camera",
+        "-I${workspaceFolder}/Utilities/ModelClass",
+        "-I/usr/include/assimp",
+        "-I./minimp3",
+        // Libraries
         "-ldl",
         "-lglfw",
-        "-I/usr/include/assimp", // include path
-        "-lassimp", // link against assimp
+        "-lassimp",
         "-lopenal",
-         "-lsndfile",
-        "-I./minimp3" 
+        "-lsndfile"
       ],
       "options": {
         "cwd": "${fileDirname}"
@@ -47,7 +44,7 @@
         "kind": "build",
         "isDefault": true
       },
-      "detail": "Compile active file plus glad and Shader from fixed util folder"
+      "detail": "Compile active file plus glad and Shader from fixed Utilities folder"
     }
   ]
 }
