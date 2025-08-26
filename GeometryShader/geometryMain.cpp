@@ -129,17 +129,18 @@ int main(int argc, char *argv[])
 
         // add the second money
 
-        // shaderTextureMonkey->use();
-        // for (Mesh mesh : monkeyTexture.get()->getMeshes())
-        // {
-        //     glBindVertexArray(mesh.getVAO());
-        //     glActiveTexture(GL_TEXTURE0);
-        //     glBindTexture(GL_TEXTURE_2D, texture);
-        // }
+        shaderTextureMonkey->use();
+        for (Mesh mesh : monkeyTexture.get()->getMeshes())
+        {
+            glBindVertexArray(mesh.getVAO());
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, texture);
+        }
         shaderMonkey->setVec3("viewPos", camera.Position);
         shaderMonkey->setMat4("view", view);
         shaderMonkey->setMat4("projection", projection);
         model = glm::translate(model, glm::vec3(3.0f, 0.0f, 0.0f));
+        model = glm::scale(model,glm::vec3(3));
         shaderMonkey->setMat4("model", model);
 
         monkeyTexture->Draw(*shaderMonkey);
